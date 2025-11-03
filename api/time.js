@@ -1,5 +1,7 @@
 export default function handler(req, res) {
-  const now = new Date();
+  const now = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+  );
 
   const dayOfYear = Math.floor(
     (now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)
@@ -15,7 +17,7 @@ export default function handler(req, res) {
   const seasons = ["verão", "outono", "inverno", "primavera"];
   const season = seasons[Math.floor(((now.getMonth() + 1) % 12) / 3)];
 
-  const weekday_number = now.getDay() === 0 ? 1 : now.getDay() + 1;
+  const weekday_number = now.getDay() === 0 ? 7 : now.getDay();
 
   const year_string = now
     .toLocaleDateString("pt-BR", {
@@ -35,8 +37,8 @@ export default function handler(req, res) {
     .replace(/ /g, "");
 
   const data = {
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    utc_offset: now.getTimezoneOffset() / -60,
+    timezone: "America/Sao_Paulo",
+    utc_offset: -3,
     year: now.getFullYear(),
     month: now.toLocaleString("pt-BR", { month: "long" }),
     month_number: now.getMonth() + 1,
@@ -54,7 +56,7 @@ export default function handler(req, res) {
     day_of_year: dayOfYear,
     season,
     greeting: greetings,
-    is_weekend: [1, 7].includes(weekday_number),
+    is_weekend: [6, 7].includes(weekday_number),
   };
 
   res.status(200).json(data);
